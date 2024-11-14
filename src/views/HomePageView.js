@@ -45,9 +45,9 @@ const HomepageView = () => {
             Featured Cute Kittens for Adopt
           </h2>
           <p className="text-slate-400">
-            Pewpew connects pawsome people like you with happy, healthy kitten
+            {`Pewpew connects pawsome people like you with happy, healthy kitten
             from our respected, prominent breeder relationships we've
-            established over the last 5 years.
+            established over the last 5 years.`}
           </p>
         </div>
         <div>
