@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Newsletter = () => {
   return (
-    <div className="bg-gradient-to-t from-blue to-blue_lighter max-w-[1000px] rounded-xl p-20 mx-auto mt-32 sm:flex relative">
+    <div className="bg-gradient-to-t from-blue to-blue_lighter max-w-[1000px] rounded-xl px-20 py-64 mx-auto mt-32 sm:flex relative">
       <Image
         src={"/img/sitting-cat.png"}
         width={400}
