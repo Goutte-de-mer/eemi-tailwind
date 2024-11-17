@@ -1,8 +1,8 @@
 import ContactInfos from "./ContactInfos";
-import ButtonGradient from "../buttons/ButtonGradient";
+import ButtonBorder from "../buttons/ButtonBorder";
 const ContactForm = () => {
   return (
-    <form className="flex flex-col justify-between rounded-2xl bg-white p-3 sm:flex-row">
+    <form className="flex flex-col justify-between rounded-2xl bg-white p-3 shadow-lg shadow-slate-200 sm:flex-row">
       <ContactInfos />
       {/* Form inputs */}
       <div className="flex flex-wrap justify-between gap-x-3 gap-y-7 px-5 py-7 sm:gap-y-10 sm:px-9 md:max-w-[600px]">
@@ -43,9 +43,7 @@ const ContactForm = () => {
             Message
           </label>
         </div>
-
-        <button type="submit">Submit</button>
-        {/* <ButtonGradient type={"submit"} text={"Submit"} /> */}
+        <ButtonBorder text={"Submit"} />
       </div>
     </form>
   );

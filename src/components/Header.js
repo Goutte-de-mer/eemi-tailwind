@@ -6,6 +6,7 @@ import { faBars, faBullseye } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
 import { menu } from "@/data";
+import HamburgerMenu from "./HamburgerMenu";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,9 +48,7 @@ const Header = () => {
             className="text-purple"
           />
         </div>
-        <div className="ml-auto w-fit cursor-pointer md:hidden">
-          <FontAwesomeIcon icon={faBars} size="lg" className="text-purple" />
-        </div>
+        <HamburgerMenu items={menuItems} />
       </div>
     </header>
   );
