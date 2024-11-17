@@ -18,10 +18,10 @@ const TiltedCard = ({ img, text, title, index }) => {
   return (
     <div
       className={`${cardColors(
-        isBlue
-      )} w-[290px] min-w-[200px] p-6 rounded-2xl h-64 skew-y-6 relative`}
+        isBlue,
+      )} relative h-64 w-[290px] min-w-[260px] skew-y-6 rounded-2xl p-6`}
     >
-      <div className="-skew-y-6 text-center -translate-y-9">
+      <div className="-translate-y-9 -skew-y-6 text-center">
         <Image
           height={100}
           width={100}
@@ -29,15 +29,15 @@ const TiltedCard = ({ img, text, title, index }) => {
           alt="cute kitten illustration"
           className="m-auto -translate-y-9"
         />
-        <div className=" -translate-y-4">
-          <h2 className="font-semibold mb-3">{title}</h2>
+        <div className="-translate-y-4">
+          <h2 className="mb-3 font-semibold">{title}</h2>
           <p className="text-[0.85rem]">{text}</p>
         </div>
       </div>
       <button
         className={`${btnColor(
-          isBlue
-        )} text-white h-12 w-12 -skew-y-6 rounded-full absolute bottom-[-24px] left-[40%]`}
+          isBlue,
+        )} hover:hover absolute bottom-[-24px] left-[40%] h-12 w-12 -skew-y-6 rounded-full text-white`}
       >
         <FontAwesomeIcon size="lg" icon={faArrowRight} />
       </button>

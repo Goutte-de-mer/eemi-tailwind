@@ -1,6 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import BannerInfo from "@/components/BannerInfo";
-import ButtonBorder from "@/components/ButtonBorder";
+import ButtonBorder from "@/components/buttons/ButtonBorder";
 import TiltedCard from "@/components/TiltedCard";
 import Carousel from "@/components/Carousel";
 import Newsletter from "@/components/Newsletter";
@@ -27,21 +27,23 @@ const HomepageView = () => {
   return (
     <>
       <HeroSection />
-      <div className="shadow-lg shadow-indigo-500/50 gradient p-6 py-10 rounded-xl flex justify-center gap-10 text-white section">
-        <div className="flex w-[45%] gap-5 justify-around after items-center">
+      <div className="gradient section flex flex-col justify-center gap-10 rounded-xl p-6 py-10 text-white shadow-lg shadow-indigo-500/50 sm:flex-row">
+        <div className="flex w-full items-center justify-around gap-5 sm:w-[45%]">
           {infos}
         </div>
-        <div className="w-[45%]">
-          <h4 className="text-xl font-semibold mb-4">Our Testimoni</h4>
+        <div className="line"></div>
+        <div className="w-full sm:w-[45%]">
+          <h4 className="mb-4 text-xl font-semibold">Our Testimoni</h4>
           <p>
             We adopted our puppy. Although I was skeptical, everything turned
             out perfect!
           </p>
         </div>
       </div>
-      <div className="section flex gap-7 my-20">
+
+      <div className="section my-20 flex flex-col gap-7 sm:flex-row">
         <div>
-          <h2 className=" text-lg sm:text-3xl font-medium mb-4">
+          <h2 className="mb-4 text-lg font-medium sm:text-3xl">
             Featured Cute Kittens for Adopt
           </h2>
           <p className="text-slate-400">
@@ -54,12 +56,12 @@ const HomepageView = () => {
           <ButtonBorder text={"View all Kittens"} />
         </div>
       </div>
-      <div className="flex-col md:flex-row items-center flex gap-10 justify-center mt-28">
+
+      <div className="mt-28 flex flex-col items-center justify-center gap-20 mdCustom:flex-row mdCustom:gap-10">
         {cards}
       </div>
       <Carousel slides={slides} />
       <Newsletter />
-      <Footer />
     </>
   );
 };

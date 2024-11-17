@@ -16,19 +16,21 @@ const Header = () => {
 
   return (
     <header className="text-black">
-      <div className="hidden sm:flex w-full justify-between">
+      <div className="flex w-full items-center justify-between gap-5">
         <Logo />
-        <ul className="flex gap-x-7 font-medium">{menuItems}</ul>
-        <div>
+        <ul className="hidden items-center font-medium sm:gap-4 sm:text-sm md:flex lg:gap-x-7 lg:text-base">
+          {menuItems}
+        </ul>
+        <div className="hidden md:block">
           <FontAwesomeIcon
             icon={faBullseye}
             size="2x"
             className="text-purple"
           />
         </div>
-      </div>
-      <div className="sm:hidden ml-auto w-fit cursor-pointer">
-        <FontAwesomeIcon icon={faBars} size="lg" className="text-purple" />
+        <div className="ml-auto w-fit cursor-pointer md:hidden">
+          <FontAwesomeIcon icon={faBars} size="lg" className="text-purple" />
+        </div>
       </div>
     </header>
   );

@@ -22,7 +22,8 @@ module.exports = {
         "-3": "-3deg",
       },
       screens: {
-        md: "1020px",
+        mdCustom: "900px",
+        xs: "500px",
       },
     },
   },

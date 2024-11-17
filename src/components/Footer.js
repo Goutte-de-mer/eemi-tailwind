@@ -17,17 +17,17 @@ const Footer = () => {
     );
   });
   return (
-    <div className="px-10 pt-16 pb-11 border-t-2 border-slate-400 mt-32 flex flex-col sm:flex-row justify-between max-w-[1000px] m-auto">
+    <footer className="section mt-20 flex flex-col items-center justify-between gap-4 border-t-2 border-slate-400 px-10 pb-5 pt-10 sm:mt-32 sm:flex-row sm:pb-11 sm:pt-16">
       <Logo />
-      <ul className="flex flex-col sm:flex-row gap-4 font-medium">
+      <ul className="flex flex-col items-center gap-4 text-center text-sm font-medium sm:flex-row md:text-base">
         {menuItems}
       </ul>
-      <div className="text-purple flex gap-4">
+      <div className="flex gap-4 text-purple">
         <FontAwesomeIcon icon={faFacebook}></FontAwesomeIcon>
         <FontAwesomeIcon icon={faTwitter}></FontAwesomeIcon>
         <FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon>
       </div>
-    </div>
+    </footer>
   );
 };
 
