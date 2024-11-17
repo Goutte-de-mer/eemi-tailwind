@@ -25,6 +25,10 @@ module.exports = {
         mdCustom: "900px",
         xs: "500px",
       },
+      backgroundImage: {
+        "half-split":
+          'linear-gradient(to bottom,theme("colors.blue_lighter") 55%, white 45%)',
+      },
     },
   },
   plugins: [],

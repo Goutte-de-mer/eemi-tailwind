@@ -1,5 +1,11 @@
+import Link from "next/link";
+
 const Logo = () => {
-  return <p className="text-xl font-extrabold text-purple">Pewpew</p>;
+  return (
+    <Link href={"/"} className="text-xl font-extrabold text-purple">
+      Pewpew
+    </Link>
+  );
 };
 
 export default Logo;

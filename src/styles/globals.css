@@ -4,10 +4,20 @@
 
 @layer base {
   body {
-    @apply min-h-screen px-5 py-7 font-main sm:py-11 md:px-20;
+    @apply min-h-screen font-main text-black;
   }
   p {
     @apply text-small;
+  }
+  main {
+    @apply px-5 py-7 sm:py-11 md:px-20;
+  }
+  input,
+  textarea {
+    @apply text-sm;
+  }
+  label {
+    @apply text-xs font-medium text-slate-400;
   }
 }
 
@@ -27,5 +37,14 @@
   }
   .text-small {
     @apply text-sm sm:text-base;
+  }
+  .scrolled {
+    @apply bg-white drop-shadow-lg transition-shadow duration-300;
+  }
+  .input {
+    @apply border-b-[1.5px] border-b-slate-300 px-1 py-2 focus:border-b-purple focus-visible:outline-none;
+  }
+  label {
+    @apply transition-colors peer-focus:text-purple;
   }
 }

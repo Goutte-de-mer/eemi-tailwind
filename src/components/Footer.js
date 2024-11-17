@@ -23,9 +23,15 @@ const Footer = () => {
         {menuItems}
       </ul>
       <div className="flex gap-4 text-purple">
-        <FontAwesomeIcon icon={faFacebook}></FontAwesomeIcon>
-        <FontAwesomeIcon icon={faTwitter}></FontAwesomeIcon>
-        <FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon>
+        <button>
+          <FontAwesomeIcon icon={faFacebook}></FontAwesomeIcon>
+        </button>
+        <button>
+          <FontAwesomeIcon icon={faTwitter}></FontAwesomeIcon>
+        </button>
+        <button>
+          <FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon>
+        </button>
       </div>
     </footer>
   );

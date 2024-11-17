@@ -1,7 +1,11 @@
-import React from "react";
+import ContactPageView from "@/views/ContactPageView";
 
 const Contact = () => {
-  return <div>Contact</div>;
+  return (
+    <main className="bg-half-split pt-32">
+      <ContactPageView />
+    </main>
+  );
 };
 
 export default Contact;
