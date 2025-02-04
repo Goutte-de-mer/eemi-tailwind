@@ -45,6 +45,7 @@
     - name: Démarrer l’application avec PM2
       shell: |
         cd {{ app_dir }}
-        pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
+        pm2 describe next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
         pm2 save
+
 
