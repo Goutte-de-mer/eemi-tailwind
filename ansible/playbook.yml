@@ -33,7 +33,7 @@
       shell: |
         cd {{ app_dir }}
         git reset --hard
-        git pull
+        git pull origin main
       when: git_repo.stat.exists
 
     - name: Installer les dépendances et builder
@@ -45,6 +45,6 @@
     - name: Démarrer l’application avec PM2
       shell: |
         cd {{ app_dir }}
-        pm2 restart npm --name "next-app" -- run start || pm2 start npm --name "next-app" -- run start
+        pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
         pm2 save
-        pm2 startup  
+
