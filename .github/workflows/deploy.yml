@@ -23,6 +23,9 @@ jobs:
       - name: Vérifier la connexion SSH
         run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.60.168.45  "echo 'Connexion SSH réussie'"
 
+      - name: Lister les fichiers Ansible
+        run: ls -la ansible/
+
       - name: Exécuter Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
