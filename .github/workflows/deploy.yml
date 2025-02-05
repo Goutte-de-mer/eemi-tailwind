@@ -1,4 +1,4 @@
-name: Deploy Next.js App
+name: Deploy Next.js Application
 
 on:
   push:
@@ -8,16 +8,50 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Récupérer le code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Exécuter Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
         with:
-          playbook: ansible/playbook.yml
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          inventory: |
-            [webserver]
-            13.60.168.45 ansible_user=ubuntu
-          options: "-u ubuntu"
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy Application via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@13.60.168.45 "bash -s" <<'EOF'
+
+            # Variables
+            REPO_URL="https://github.com/Goutte-de-mer/eemi-tailwind.git"
+            APP_DIR="/home/ubuntu/eemi-tailwind"
+
+            # Update the system
+            sudo apt-get update && sudo apt-get upgrade -y
+
+            # Install Node.js and PM2
+            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            sudo npm install -g pm2
+
+            # Clone or update the repository
+            if [ -d "$APP_DIR/.git" ]; then
+              cd $APP_DIR
+              git reset --hard
+              git pull origin main
+            else
+              git clone $REPO_URL $APP_DIR
+            fi
+
+            # Install dependencies and build
+            cd $APP_DIR
+            npm install
+            npm run build
+
+            # Start the application with PM2
+            pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
+            pm2 save
+
+          EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
