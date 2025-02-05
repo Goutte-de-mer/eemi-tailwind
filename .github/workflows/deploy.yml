@@ -16,7 +16,8 @@ jobs:
         run: |
           echo "[webserver]" > temp_inventory.ini
           echo "13.60.168.45 ansible_user=ubuntu" >> temp_inventory.ini
-          ansible -i temp_inventory.ini webserver -m ping -u ubuntu -vvv
+          ansible -i temp_inventory.ini webserver -m ping -u ubuntu -vvv \
+            -o StrictHostKeyChecking=no
 
       - name: Exécuter Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
