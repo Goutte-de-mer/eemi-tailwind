@@ -1,4 +1,4 @@
-name: Déploiement de l’application Next.js
+name: Deploy Next.js App
 
 on:
   push:
@@ -10,50 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cloner le repository
-        uses: actions/checkout@v2
-
-      - name: Configurer SSH
-        uses: webfactory/ssh-agent@v0.5.4
+      - name: Déployer sur le serveur
+        uses: appleboy/ssh-action@v0.1.11
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: 13.60.168.45
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Si nécessaire : port: ${{ secrets.SERVER_PORT }}
+          script: |
+            # 1. Mettre à jour et upgrader le système
+            sudo apt-get update -y
+            sudo apt-get upgrade -y
 
-      - name: Déploiement sur le serveur distant
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@13.60.168.45 << 'EOF'
-            # Mettre à jour le système
-            sudo apt-get update && sudo apt-get upgrade -y
-
-            # Installer Node.js et PM2
-            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+            # 2. Installer Node.js 22 et PM2
+            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash -
             sudo apt-get install -y nodejs
             sudo npm install -g pm2
 
-            # Variables du projet
-            REPO_URL="https://github.com/Goutte-de-mer/eemi-tailwind.git"
-            APP_DIR="/home/ubuntu/eemi-tailwind"
-
-            # Vérifier si le projet est déjà cloné
-            if [ -d "$APP_DIR/.git" ]; then
-              cd $APP_DIR
+            # 3. Vérifier si le dossier .git existe pour savoir si on doit cloner ou pull
+            if [ ! -d "/home/ubuntu/eemi-tailwind/.git" ]; then
+              # 3a. Cloner le dépôt
+              git clone https://github.com/Goutte-de-mer/eemi-tailwind.git /home/ubuntu/eemi-tailwind
+            else
+              # 3b. Sinon, faire un reset + pull
+              cd /home/ubuntu/eemi-tailwind
               git reset --hard
               git pull origin main
-            else
-              git clone $REPO_URL $APP_DIR
             fi
 
-            # Corriger les permissions
-            sudo chown -R ubuntu:ubuntu $APP_DIR
-            sudo chmod -R u+rwX $APP_DIR
-
-            # Installer les dépendances
-            cd $APP_DIR
-            npm install --legacy-peer-deps
-
-            # Builder l’application
+            # 4. Installer les dépendances et builder l'application
+            cd /home/ubuntu/eemi-tailwind
+            npm install
             npm run build
 
-            # Démarrer l’application avec PM2
+            # 5. Démarrer ou redémarrer l'application Next.js avec PM2
             pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
             pm2 save
-          EOF
