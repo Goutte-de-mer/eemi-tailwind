@@ -46,3 +46,79 @@ jobs:
             # 5. Démarrer ou redémarrer l'application Next.js avec PM2
             pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
             pm2 save
+
+
+name: Déploiement Next.js sur AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Récupérer le code source du dépôt
+      - name: Checkout du dépôt
+        uses: actions/checkout@v3
+
+      # 2. Se connecter à l'instance EC2 et déployer l'application
+      - name: Déploiement sur EC2 via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}         # Adresse IP ou DNS de votre serveur EC2
+          username: ubuntu     # Nom d'utilisateur sur le serveur (ex. "ubuntu")
+          key: ${{ secrets.SSH_PRIVATE_KEY }}         # Contenu de votre clé privée SSH (celle de ~/.ssh/ssh_key.pem)
+          port: 22
+          script: |
+            # 3. Mettre à jour le système
+            echo "Mise à jour du système..."
+            sudo apt update && sudo apt upgrade -y
+
+            # 4. Installer Node.js si non présent
+            if ! command -v node >/dev/null 2>&1; then
+              echo "Installation de Node.js..."
+              curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+              sudo apt install -y nodejs
+            else
+              echo "Node.js est déjà installé."
+            fi
+
+            # 5. Installer PM2 si non présent
+            if ! command -v pm2 >/dev/null 2>&1; then
+              echo "Installation de PM2..."
+              sudo npm install -g pm2
+            else
+              echo "PM2 est déjà installé."
+            fi
+
+            # 6. Définir le dossier de déploiement du projet
+            PROJECT_DIR="/home/ubuntu/tailwind-final"
+
+            # 7. Vérifier si le dossier du projet existe et cloner ou mettre à jour
+            if [ ! -d "$PROJECT_DIR" ]; then
+              echo "Clonage du projet dans $PROJECT_DIR..."
+              git clone https://github.com/Goutte-de-mer/eemi-tailwind.git $PROJECT_DIR
+            else
+              echo "Mise à jour du projet dans $PROJECT_DIR..."
+              cd $PROJECT_DIR
+              git pull
+            fi
+
+            # 8. Installer les dépendances et builder l'application
+            cd $PROJECT_DIR
+            echo "Installation des dépendances..."
+            npm install
+            echo "Build de l'application..."
+            npm run build
+
+            # 9. Démarrer (ou recharger) l’application avec PM2
+            if pm2 list | grep -q next-app; then
+              echo "Redémarrage de l'application avec PM2..."
+              pm2 reload next-app
+            else
+              echo "Démarrage de l'application avec PM2..."
+              pm2 start npm --name "next-app" -- start
+            fi
