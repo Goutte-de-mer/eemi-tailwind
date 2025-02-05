@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Déployer sur le serveur
-        uses: appleboy/ssh-action@main
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: 13.60.168.45
           username: ubuntu
