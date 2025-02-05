@@ -1,53 +1,3 @@
-name: Deploy Next.js App
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Déployer sur le serveur
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: 13.60.168.45
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # Si nécessaire : port: ${{ secrets.SERVER_PORT }}
-          script: |
-            # 1. Mettre à jour et upgrader le système
-            sudo apt-get update -y
-            sudo apt-get upgrade -y
-
-            # 2. Installer Node.js 22 et PM2
-            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash -
-            sudo apt-get install -y nodejs
-            sudo npm install -g pm2
-
-            # 3. Vérifier si le dossier .git existe pour savoir si on doit cloner ou pull
-            if [ ! -d "/home/ubuntu/eemi-tailwind/.git" ]; then
-              # 3a. Cloner le dépôt
-              git clone https://github.com/Goutte-de-mer/eemi-tailwind.git /home/ubuntu/eemi-tailwind
-            else
-              # 3b. Sinon, faire un reset + pull
-              cd /home/ubuntu/eemi-tailwind
-              git reset --hard
-              git pull origin main
-            fi
-
-            # 4. Installer les dépendances et builder l'application
-            cd /home/ubuntu/eemi-tailwind
-            npm install --legacy-peer-deps
-            npm run build
-
-            # 5. Démarrer ou redémarrer l'application Next.js avec PM2
-            pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
-            pm2 save
-
-
 name: Déploiement Next.js sur AWS EC2
 
 on:
@@ -68,9 +18,9 @@ jobs:
       - name: Déploiement sur EC2 via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SERVER_HOST }}         # Adresse IP ou DNS de votre serveur EC2
-          username: ubuntu     # Nom d'utilisateur sur le serveur (ex. "ubuntu")
-          key: ${{ secrets.SSH_PRIVATE_KEY }}         # Contenu de votre clé privée SSH (celle de ~/.ssh/ssh_key.pem)
+          host: ${{ secrets.SERVER_HOST }} # Adresse IP ou DNS de votre serveur EC2
+          username: ubuntu # Nom d'utilisateur sur le serveur (ex. "ubuntu")
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # Contenu de votre clé privée SSH (celle de ~/.ssh/ssh_key.pem)
           port: 22
           script: |
             # 3. Mettre à jour le système
