@@ -1,4 +1,4 @@
-name: Deploy Next.js Application
+name: Déploiement de l’application Next.js
 
 on:
   push:
@@ -10,31 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Cloner le repository
         uses: actions/checkout@v2
 
-      - name: Setup SSH
+      - name: Configurer SSH
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy Application via SSH
+      - name: Déploiement sur le serveur distant
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@13.60.168.45 "bash -s" <<'EOF'
-
-            # Variables
-            REPO_URL="https://github.com/Goutte-de-mer/eemi-tailwind.git"
-            APP_DIR="/home/ubuntu/eemi-tailwind"
-
-            # Update the system
+          ssh -o StrictHostKeyChecking=no ubuntu@13.60.168.45 << 'EOF'
+            # Mettre à jour le système
             sudo apt-get update && sudo apt-get upgrade -y
 
-            # Install Node.js and PM2
+            # Installer Node.js et PM2
             curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
             sudo apt-get install -y nodejs
             sudo npm install -g pm2
 
-            # Clone or update the repository
+            # Variables du projet
+            REPO_URL="https://github.com/Goutte-de-mer/eemi-tailwind.git"
+            APP_DIR="/home/ubuntu/eemi-tailwind"
+
+            # Vérifier si le projet est déjà cloné
             if [ -d "$APP_DIR/.git" ]; then
               cd $APP_DIR
               git reset --hard
@@ -43,15 +42,18 @@ jobs:
               git clone $REPO_URL $APP_DIR
             fi
 
-            # Install dependencies and build
+            # Corriger les permissions
+            sudo chown -R ubuntu:ubuntu $APP_DIR
+            sudo chmod -R u+rwX $APP_DIR
+
+            # Installer les dépendances
             cd $APP_DIR
-            npm install
+            npm install --legacy-peer-deps
+
+            # Builder l’application
             npm run build
 
-            # Start the application with PM2
+            # Démarrer l’application avec PM2
             pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start
             pm2 save
-
           EOF
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
