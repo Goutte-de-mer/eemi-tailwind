@@ -11,7 +11,7 @@ const HeroSection = () => {
         {/* LEFT COLUMN */}
         <div className="">
           <h1 className="mb-7 text-3xl font-semibold sm:text-5xl">
-            Find your neww <br /> companion
+            Find your newww <br /> companion
           </h1>
           <div className="flex items-center">
             <div className="mr-4 w-fit rounded-full bg-[#ffdfea] p-3">
