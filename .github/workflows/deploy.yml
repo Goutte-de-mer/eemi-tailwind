@@ -12,17 +12,12 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v2
 
-      - name: Créer un inventaire temporaire (test)
-        run: |
-          echo "[webserver]" > temp_inventory.ini
-          echo "13.60.168.45 ansible_user=ubuntu" >> temp_inventory.ini
-          ansible -i temp_inventory.ini webserver -m ping -u ubuntu -vvv \
-            -o StrictHostKeyChecking=no
-
       - name: Exécuter Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: ansible/playbook.yml
-          inventory: ansible/inventory.ini
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          options: -u ubuntu
+          inventory: |
+            [webserver]
+            13.60.168.45 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+          options: "-u ubuntu"
