@@ -13,21 +13,8 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v3
 
-      - name: Ajouter la clé SSH privée et configurer SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 13.60.168.45 >> ~/.ssh/known_hosts
-
-      - name: Vérifier la connexion SSH
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.60.168.45  "echo 'Connexion SSH réussie'"
-
-      - name: Afficher le contenu de l’inventaire
-        run: cat -A ansible/inventory.ini
-
-      - name: Tester Ansible en mode debug
-        run: ansible -i ansible/inventory.ini webserver -m ping -u ubuntu -vvv
+      - name: Convertir le fichier inventory.ini en format Unix
+        run: dos2unix ansible/inventory.ini
 
       - name: Exécuter Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
