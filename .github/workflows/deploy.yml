@@ -60,7 +60,7 @@ jobs:
             # 8. Installer les dépendances et builder l'application
             cd $PROJECT_DIR
             echo "Installation des dépendances..."
-            npm install
+            npm install --legacy-peer-deps
             echo "Build de l'application..."
             npm run build
 
