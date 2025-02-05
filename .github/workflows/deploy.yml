@@ -40,7 +40,7 @@ jobs:
 
             # 4. Installer les dépendances et builder l'application
             cd /home/ubuntu/eemi-tailwind
-            npm install
+            npm install --legacy-peer-deps
             npm run build
 
             # 5. Démarrer ou redémarrer l'application Next.js avec PM2
